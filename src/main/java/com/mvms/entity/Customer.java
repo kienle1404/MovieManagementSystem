@@ -16,28 +16,31 @@ public class Customer {
     @Column(name = "customer_id")
     private Long id;
 
-    @Column(name = "first_name", columnDefinition = "VARCHAR(50)")
+    @ManyToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    private Address address;
+
+    @Column(name = "first_name", columnDefinition = "VARCHAR(255)")
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "VARCHAR(50)")
+    @Column(name = "last_name", columnDefinition = "VARCHAR(255)")
     private String lastName;
-
-    @Column(name = "created_dtm")
-    private LocalDateTime createdDtm;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
     private Gender gender;
 
-    @Column(name = "email", unique = true, length = 50)
+    @Column(name = "email", unique = true, length = 50, nullable = false)
     private String email;
 
     @Column(name = "active")
     private boolean active;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
-    private Address address;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "last_update", nullable = false)
+    private LocalDateTime lastUpdate;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Phone> phones = new HashSet<>();
@@ -54,6 +57,7 @@ public class Customer {
         this.gender = gender;
         this.email = email;
         this.active = active;
+        lastUpdate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -80,12 +84,12 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public LocalDateTime getCreatedDtm() {
-        return createdDtm;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreatedDtm(LocalDateTime createdDtm) {
-        this.createdDtm = createdDtm;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Gender getGender() {
@@ -134,5 +138,13 @@ public class Customer {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }
