@@ -3,6 +3,7 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,9 @@ public class Customer {
 
     @ManyToMany(mappedBy = "customers")
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Rental> rentals;
 
     public Customer() {
     }
