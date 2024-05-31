@@ -24,6 +24,18 @@
 		<mapping class="com.mvms.entity.Store"/>
 		<mapping class="com.mvms.entity.Phone"/>
 		<mapping class="com.mvms.entity.Order"/>
+		<mapping class="com.mvms.entity.Actor"/>
+		<mapping class="com.mvms.entity.Category"/>
+		<mapping class="com.mvms.entity.City"/>
+		<mapping class="com.mvms.entity.Country"/>
+		<mapping class="com.mvms.entity.Film"/>
+		<mapping class="com.mvms.entity.FilmActor"/>
+		<mapping class="com.mvms.entity.FilmCategory"/>
+		<mapping class="com.mvms.entity.Inventory"/>
+		<mapping class="com.mvms.entity.Language"/>
+		<mapping class="com.mvms.entity.Payment"/>
+		<mapping class="com.mvms.entity.Rental"/>
+		<mapping class="com.mvms.entity.Staff"/>
 
 	</session-factory>
 </hibernate-configuration>
