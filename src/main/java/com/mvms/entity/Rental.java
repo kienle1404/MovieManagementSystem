@@ -38,28 +38,56 @@ public class Rental {
         lastUpdate = LocalDateTime.now();
     }
 
+    public Long getRentalId() {
+        return rentalId;
+    }
+
     public void setRentalId(Long rentalId) {
         this.rentalId = rentalId;
+    }
+
+    public Staff getStaff() {
+        return staff;
     }
 
     public void setStaff(Staff staff) {
         this.staff = staff;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 
+    public LocalDate getRentalDate() {
+        return rentalDate;
+    }
+
     public void setRentalDate(LocalDate rentalDate) {
         this.rentalDate = rentalDate;
     }
 
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
