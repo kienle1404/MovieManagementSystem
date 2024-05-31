@@ -2,6 +2,7 @@ package com.mvms.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -13,17 +14,30 @@ public class Address {
     @Column(name = "address_id")
     private Long id;
 
-    @Column(name = "address1")
+    @Column(name = "address1", nullable = false, length = 50)
     private String address1;
 
-    @Column(name = "address2")
+    @Column(name = "address2", nullable = false, length = 50)
     private String address2;
 
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    @Column(name = "district", nullable = false, length = 20)
+    private Long district;
+
+    @Column(name = "postal_code", nullable = false, length = 10)
+    private String postalCode;
+
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
+
+    @Column(name = "last_update", nullable = false)
+    private LocalDateTime lastUpdate;
+
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Customer> customers;
 
     @OneToOne(mappedBy = "address")
     private Store store;
+
 
     public Long getId() {
         return id;
@@ -49,6 +63,30 @@ public class Address {
         this.address2 = address2;
     }
 
+    public Long getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(Long district) {
+        this.district = district;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public List<Customer> getCustomers() {
         return customers;
     }
@@ -63,5 +101,13 @@ public class Address {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }
