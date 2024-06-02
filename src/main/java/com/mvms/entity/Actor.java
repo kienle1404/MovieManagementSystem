@@ -3,6 +3,8 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "actor")
@@ -21,9 +23,13 @@ public class Actor {
     @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
 
+    @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
+    private List<FilmActor> filmActors;
+
     public Actor(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.filmActors = new ArrayList<>();
         this.lastUpdate = LocalDateTime.now();
     }
 
@@ -57,5 +63,13 @@ public class Actor {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public List<FilmActor> getFilmActors() {
+        return filmActors;
+    }
+
+    public void setFilmActors(List<FilmActor> filmActors) {
+        this.filmActors = filmActors;
     }
 }

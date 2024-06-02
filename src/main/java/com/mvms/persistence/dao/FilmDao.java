@@ -5,7 +5,4 @@ import com.mvms.entity.Film;
 
 public interface FilmDao {
     String create();
-//    String delete() throws SQLException;
-//    String modify() throws SQLException;
-//    String query() throws SQLException;
 }

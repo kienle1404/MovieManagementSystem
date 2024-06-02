@@ -7,13 +7,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "film_category")
 public class FilmCategory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long Id;
+
     @ManyToOne
     @JoinColumn(name = "film_id", referencedColumnName = "film_id")
-    private Long filmId;
+    private Film film;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    private Long categoryId;
+    private Category category;
 
     @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
@@ -22,20 +27,26 @@ public class FilmCategory {
         this.lastUpdate = LocalDateTime.now();
     }
 
-    public Long getFilmId() {
-        return filmId;
+    public FilmCategory(Film film, Category category) {
+        this.film = film;
+        this.category = category;
+        this.lastUpdate = LocalDateTime.now();
     }
 
-    public void setFilmId(Long filmId) {
-        this.filmId = filmId;
+    public Film getFilm() {
+        return film;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public void setFilm(Film film) {
+        this.film = film;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public LocalDateTime getLastUpdate() {

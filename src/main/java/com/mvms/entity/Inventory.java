@@ -20,8 +20,8 @@ public class Inventory {
     @JoinColumn(name = "film_id", referencedColumnName = "film_id")
     private Film film;
 
-     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
-     private List<Rental> rentals;
+//    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+//    private List<Rental> rentals;
 
 
     public Inventory() {

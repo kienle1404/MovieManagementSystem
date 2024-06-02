@@ -3,6 +3,7 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,8 +44,8 @@ public class Film {
     @Column(name = "special_features", nullable = false)
     private String specialFeatures;
 
-    @Column(name = "fulltext", nullable = false)
-    private String fulltext;
+    @Column(name = "full_text", nullable = false)
+    private String fullText;
 
     @ManyToOne
     @JoinColumn(name = "language_id", referencedColumnName = "language_id")
@@ -52,6 +53,12 @@ public class Film {
 
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
     private List<Inventory> inventories;
+
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    private List<FilmCategory> filmCategories;
+
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    private List<FilmActor> filmActors;
 
     public Film(String title, String description) {
         this.title = title;
@@ -64,7 +71,11 @@ public class Film {
         this.rating = 5L;
         this.lastUpdate = LocalDateTime.now();
         this.specialFeatures = "";
-        this.fulltext = "";
+        this.fullText = "";
+
+        this.inventories = new ArrayList<>();
+        this.filmCategories = new ArrayList<>();
+        this.filmActors = new ArrayList<>();
     }
 
     public Film(String title, String description, Long releaseYear, Long rentalDuration, Long rentalRate, Long length, Long replacementCost, Long rating, String specialFeatures, String fulltext) {
@@ -78,7 +89,11 @@ public class Film {
         this.rating = rating;
         this.lastUpdate = LocalDateTime.now();
         this.specialFeatures = specialFeatures;
-        this.fulltext = fulltext;
+        this.fullText = fulltext;
+
+        this.inventories = new ArrayList<>();
+        this.filmCategories = new ArrayList<>();
+        this.filmActors = new ArrayList<>();
     }
 
     public Long getFilmId() {
@@ -170,11 +185,11 @@ public class Film {
     }
 
     public String getFulltext() {
-        return fulltext;
+        return fullText;
     }
 
-    public void setFulltext(String fulltext) {
-        this.fulltext = fulltext;
+    public void setFulltext(String fullText) {
+        this.fullText = fullText;
     }
 
     public Language getLanguage() {
@@ -191,5 +206,21 @@ public class Film {
 
     public void setInventories(List<Inventory> inventories) {
         this.inventories = inventories;
+    }
+
+    public List<FilmCategory> getFilmCategories() {
+        return filmCategories;
+    }
+
+    public void setFilmCategories(List<FilmCategory> filmCategories) {
+        this.filmCategories = filmCategories;
+    }
+
+    public List<FilmActor> getFilmActors() {
+        return filmActors;
+    }
+
+    public void setFilmActors(List<FilmActor> filmActors) {
+        this.filmActors = filmActors;
     }
 }

@@ -3,6 +3,7 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,7 @@ public class Language {
 
     public Language(String name) {
         this.name = name;
+        this.films = new ArrayList<>();
         this.lastUpdate = LocalDateTime.now();
     }
 

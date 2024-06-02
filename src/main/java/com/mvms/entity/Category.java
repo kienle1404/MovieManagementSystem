@@ -3,6 +3,7 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,9 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<FilmCategory> filmCategories;
 
-    public Category() {
+    public Category(String name) {
+        this.name = name;
+        this.filmCategories = new ArrayList<>();
         this.lastUpdate = LocalDateTime.now();
     }
 
