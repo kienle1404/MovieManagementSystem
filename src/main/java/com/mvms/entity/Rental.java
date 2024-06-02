@@ -21,9 +21,9 @@ public class Rental {
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
-//    @ManyToOne
-//    @JoinColumn(name = "inventory_id", referencedColumnName = "inventory_id")
-//    private Inventory inventory;
+    @ManyToOne
+    @JoinColumn(name = "inventory_id", referencedColumnName = "inventory_id")
+    private Inventory inventory;
 
     @Column(name = "rental_date", nullable = false)
     private LocalDate rentalDate;
@@ -64,13 +64,13 @@ public class Rental {
         this.customer = customer;
     }
 
-//    public Inventory getInventory() {
-//        return inventory;
-//    }
-//
-//    public void setInventory(Inventory inventory) {
-//        this.inventory = inventory;
-//    }
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 
     public LocalDate getRentalDate() {
         return rentalDate;

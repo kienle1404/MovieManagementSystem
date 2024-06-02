@@ -23,6 +23,11 @@ public class Language {
     @OneToMany(mappedBy = "language", cascade = CascadeType.ALL)
     private List<Film> films;
 
+    public Language() {
+        this.films = new ArrayList<>();
+        this.lastUpdate = LocalDateTime.now();
+    }
+
     public Language(String name) {
         this.name = name;
         this.films = new ArrayList<>();

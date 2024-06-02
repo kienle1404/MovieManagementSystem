@@ -60,6 +60,12 @@ public class Film {
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
     private List<FilmActor> filmActors;
 
+    public Film() {
+        this.inventories = new ArrayList<>();
+        this.filmCategories = new ArrayList<>();
+        this.filmActors = new ArrayList<>();
+    }
+
     public Film(String title, String description) {
         this.title = title;
         this.description = description;

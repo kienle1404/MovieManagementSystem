@@ -8,9 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class FilmDaoImpl implements FilmDao {
     private static Scanner scanner;
@@ -29,7 +27,7 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     @Override
-    public String create() {
+    public void create() {
         Transaction tx = null;
         Session session = null;
         try {
@@ -107,7 +105,7 @@ public class FilmDaoImpl implements FilmDao {
             // Insert language into table
             Language filmLanguage = null;
             Query query = session.createQuery("From Language WHERE name = :name", Language.class);
-            query.setParameter("name", filmLanguage);
+            query.setParameter("name", languageName);
             List<Language> languages = query.getResultList();
 
             if (languages.isEmpty()) {
@@ -117,6 +115,7 @@ public class FilmDaoImpl implements FilmDao {
                 filmLanguage = languages.get(0);
             }
 
+            // Insert FilmCategory / FilmActor -> Film / Actor / Category -> Language
             Film film = new Film(filmName, filmDescription);
 
             for (Category category: filmCategoryList) {
@@ -133,16 +132,103 @@ public class FilmDaoImpl implements FilmDao {
                 session.persist(actor);
             }
 
+            film.setLanguage(filmLanguage);
             filmLanguage.getFilms().add(film);
             session.persist(filmLanguage);
             tx.commit();
-
+            session.close();
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
+            if (tx != null) {
                 tx.rollback();
             }
             throw e;
         }
-        return "Success";
+    }
+
+    @Override
+    public void query() {
+        Transaction tx = null;
+        Session session = null;
+        List<Film> films = new ArrayList<>();
+
+        try {
+            // Initialize session and transaction
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            StringBuilder hql = new StringBuilder("WHERE 1=1");
+
+            System.out.println("Enter film title (Press Enter if skip):");
+            String filmTitle = scanner.nextLine();
+            System.out.println("Enter film language ID (Press 0 if skip):");
+            Long filmLanguageId = Long.parseLong(scanner.nextLine());
+
+            // Build StringBuilder variable
+            Map<String, Object> params = new HashMap<>();
+            if (!filmTitle.isEmpty()) {
+                hql.append(" AND title LIKE :title");
+                params.put("title", "%" + filmTitle + "%");
+            }
+
+            if (filmLanguageId > 0) {
+                List<Language> languages = session.createQuery("WHERE languageId = :languageId", Language.class)
+                        .setParameter("languageId", filmLanguageId)
+                                .getResultList();
+                if (!languages.isEmpty()) {
+                    hql.append(" AND language = :language");
+                    params.put("language", languages.get(0));
+                }
+            }
+
+            // Create query
+            Query query = session.createQuery(hql.toString(), Film.class);
+            for (Map.Entry<String, Object> entry: params.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+
+            List<Film> result = query.getResultList();
+            if (result.isEmpty()) {
+                System.out.println("No film matches the query.");
+            } else {
+                for (Film film: result) {
+                    System.out.println(
+                        film.getTitle() + ", " +
+                        film.getDescription() + ", " +
+                        (film.getLanguage() != null ? film.getLanguage().getName() : "No Language")
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        }
+    }
+
+    @Override
+    public void delete() {
+        Transaction tx = null;
+        Session session = null;
+
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+
+            System.out.println("Enter Film ID:");
+            Long filmId = Long.parseLong(scanner.nextLine());
+
+            if (filmId > 0) {
+                Film film = session.get(Film.class, filmId);
+                session.remove(film);
+                tx.commit();
+            }
+            session.close();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        }
     }
 }

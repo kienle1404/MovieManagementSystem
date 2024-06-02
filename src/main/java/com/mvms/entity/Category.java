@@ -23,6 +23,11 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<FilmCategory> filmCategories;
 
+    public Category() {
+        this.filmCategories = new ArrayList<>();
+        this.lastUpdate = LocalDateTime.now();
+    }
+
     public Category(String name) {
         this.name = name;
         this.filmCategories = new ArrayList<>();

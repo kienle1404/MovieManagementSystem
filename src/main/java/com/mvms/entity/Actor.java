@@ -26,6 +26,11 @@ public class Actor {
     @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
     private List<FilmActor> filmActors;
 
+    public Actor() {
+        this.filmActors = new ArrayList<>();
+        this.lastUpdate = LocalDateTime.now();
+    }
+
     public Actor(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
