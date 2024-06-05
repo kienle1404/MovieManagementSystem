@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "rental")
@@ -24,6 +25,9 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "inventory_id", referencedColumnName = "inventory_id")
     private Inventory inventory;
+
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
+    private List<Payment> paymentList;
 
     @Column(name = "rental_date", nullable = false)
     private LocalDate rentalDate;
@@ -94,5 +98,13 @@ public class Rental {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
     }
 }

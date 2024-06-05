@@ -3,6 +3,7 @@ package com.mvms.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "staff")
@@ -19,6 +20,12 @@ public class Staff {
     @ManyToOne
     @JoinColumn(name = "store_id", referencedColumnName = "store_id")
     private Store store;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    private List<Payment> paymentList;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    private List<Rental> rentalList;
 
     @Column(name = "payment_id", length = 10)
     private Long paymentId;
@@ -152,5 +159,21 @@ public class Staff {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    public List<Rental> getRentalList() {
+        return rentalList;
+    }
+
+    public void setRentalList(List<Rental> rentalList) {
+        this.rentalList = rentalList;
     }
 }

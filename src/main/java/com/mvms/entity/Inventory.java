@@ -51,4 +51,12 @@ public class Inventory {
     public void setFilm(Film film) {
         this.film = film;
     }
+
+    public List<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(List<Rental> rentals) {
+        this.rentals = rentals;
+    }
 }

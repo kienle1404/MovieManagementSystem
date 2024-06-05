@@ -2,6 +2,8 @@ package com.mvms.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "store")
 public class Store {
@@ -17,6 +19,10 @@ public class Store {
     @OneToOne
     @JoinColumn(name = "address_id", unique = true)
     private Address address;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Staff> staffList;
+
 
     public Long getId() {
         return id;
@@ -40,5 +46,13 @@ public class Store {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public List<Staff> getStaffList() {
+        return staffList;
+    }
+
+    public void setStaffList(List<Staff> staffList) {
+        this.staffList = staffList;
     }
 }

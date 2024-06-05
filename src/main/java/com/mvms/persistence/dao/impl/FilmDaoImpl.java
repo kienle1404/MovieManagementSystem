@@ -155,12 +155,20 @@ public class FilmDaoImpl implements FilmDao {
             // Initialize session and transaction
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            StringBuilder hql = new StringBuilder("WHERE 1=1");
+            StringBuilder hql = new StringBuilder("SELECT f FROM Film f JOIN f.filmCategories fc JOIN fc.category c WHERE 1=1");
 
             System.out.println("Enter film title (Press Enter if skip):");
             String filmTitle = scanner.nextLine();
             System.out.println("Enter film language ID (Press 0 if skip):");
             Long filmLanguageId = Long.parseLong(scanner.nextLine());
+            System.out.println("Enter a list of film categories (Press Enter if skip):");
+            String categoryString = scanner.nextLine();
+            List<String> categoryList;
+            if (categoryString.trim().isEmpty()) {
+                categoryList = new ArrayList<>();
+            } else {
+                categoryList = Arrays.asList(categoryString.split("\\s+"));
+            }
 
             // Build StringBuilder variable
             Map<String, Object> params = new HashMap<>();
@@ -170,13 +178,14 @@ public class FilmDaoImpl implements FilmDao {
             }
 
             if (filmLanguageId > 0) {
-                List<Language> languages = session.createQuery("WHERE languageId = :languageId", Language.class)
-                        .setParameter("languageId", filmLanguageId)
-                                .getResultList();
-                if (!languages.isEmpty()) {
-                    hql.append(" AND language = :language");
-                    params.put("language", languages.get(0));
-                }
+                hql.append(" AND f.language.languageId = :languageId");
+                params.put("languageId", filmLanguageId);
+            }
+
+            if (!categoryList.isEmpty()) {
+                hql.append(" AND (SELECT COUNT(fc) FROM FilmCategory fc WHERE fc.film = f AND fc.category.name IN (:categories)) = :categoryCount");
+                params.put("categories", categoryList);
+                params.put("categoryCount", categoryList.size());
             }
 
             // Create query

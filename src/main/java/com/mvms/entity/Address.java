@@ -38,6 +38,9 @@ public class Address {
     @OneToOne(mappedBy = "address")
     private Store store;
 
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    private List<Staff> staffList;
+
 
     public Long getId() {
         return id;
@@ -109,5 +112,13 @@ public class Address {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public List<Staff> getStaffList() {
+        return staffList;
+    }
+
+    public void setStaffList(List<Staff> staffList) {
+        this.staffList = staffList;
     }
 }
