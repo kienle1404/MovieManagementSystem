@@ -49,11 +49,59 @@ public class App
 //        Address removedAddr = session.get(Address.class, 1L);
         //session.remove(removedAddr);
 
-        session.persist(address);
+   public static void moreTests( String[] args )
+    {
+        insert();
+        find();
+        insertPhone();
+    }
+    public static void insert(){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Category category = new Category("Comic");
+        Film film = new Film("Comic film 1","A comic film");
+        Film film2 = new Film("Comic film 2","A comic film part 2");
+        FilmCategory filmcategory = new FilmCategory(film, category );
+        FilmCategory filmcategory2 = new FilmCategory(film2, category );
+        //List<Category> newCategories = new ArrayList<>();
+        //newCategories.add(new Category("Romance"));
+        //newCategories.add(new Category("Comedy"));
+        session.persist(category);
+        session.persist(film);
+        session.persist(film2);
+        session.persist(filmcategory);
+        session.persist(filmcategory2);
 
         tx.commit();
+        session.close();
+    }
+    public static void find(){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        //Transaction tx = session.beginTransaction();
+        FilmDao filmDao = new FilmDaoImpl();
+        //Customer customer = filmDao.queryCustomer(Long.valueOf(2));
+        //rental.setCustomer(customer);
+        filmDao.queryByFilmCategory();
 
         session.close();
+    }
+    public static void insertPhone(){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Phone phone = new Phone();
+        //PhoneGroup phoneGroup;
+        phone.setPhoneNumber("123");
+        phone.setPhoneGroup(PhoneGroup.HOME);
+        session.persist(phone);
+
+        tx.commit();
+        session.close();
+    }
 
 
     }
