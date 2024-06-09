@@ -214,6 +214,133 @@ public class FilmDaoImpl implements FilmDao {
             throw e;
         }
     }
+       @Override
+    public void queryByCustomerName(){
+        //Transaction tx = null;
+        Session session = null;
+        List<Customer> customers = new ArrayList<>();
+
+        try {
+            // Initialize session and transaction
+            session = sessionFactory.openSession();
+            //tx = session.beginTransaction();
+            StringBuilder hql = new StringBuilder("WHERE 1=1");
+
+            System.out.println("Enter name: ");
+            String customerName = scanner.nextLine();
+
+            // Build StringBuilder variable
+            Map<String, Object> params = new HashMap<>();
+            if (!customerName.isEmpty()) {
+                hql.append(" AND (firstName LIKE :first_name or lastName LIKE :last_name)");
+                params.put("first_name", "%" + customerName + "%");
+                params.put("last_name", "%" + customerName + "%");
+
+            }
+
+            // Create query
+            Query query = session.createQuery(hql.toString(), Customer.class);
+            for (Map.Entry<String, Object> entry: params.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+
+            List<Customer> result = query.getResultList();
+            if (result.isEmpty()) {
+                System.out.println("No name matches the query.");
+            } else {
+                for (Customer customer: result) {
+                    System.out.println(
+                            customer.getFirstName() + ", " +
+                                    customer.getLastName() + ", " +
+                                    customer.getAddress().getAddress1() + ", " +
+                                    customer.getAddress().getAddress2() );
+                    List<Rental> lrental = customer.getRentals();
+                    for (Rental rental: lrental) {
+                        System.out.println(rental.getRentalDate());
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            /*if (tx != null) {
+                tx.rollback();
+            }
+
+             */
+            throw e;
+        }
+
+    }
+    @Override
+    public void queryByRentalDate(){
+        Session session = null;
+        List<Rental> rentals = new ArrayList<>();
+        try{
+            //LocalDateTime now = LocalDateTime.now();
+            //System.out.println(now);
+            session = sessionFactory.openSession();
+            StringBuilder hql = new StringBuilder("WHERE 1=1");
+            System.out.println("Enter rental date (YYYY-MM-DD): ");
+            String rentalDateStr = scanner.nextLine();
+            //DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+            //LocalDate rentalDate = dateFormat.parse(rentalDateStr);
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate rentalDate = LocalDate.parse(rentalDateStr, dtf);
+            //System.out.println(rentalDateStr);
+            //LocalDateTime rentalDate = LocalDateTime.parse(rentalDateStr, dateFormat);
+            Map<String, Object> params = new HashMap<>();
+                hql.append(" AND rentalDate = :rentalDate");
+                params.put("rentalDate", rentalDate);
+            Query query = session.createQuery(hql.toString(), Rental.class);
+            for (Map.Entry<String, Object> entry: params.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+            List<Rental> result = query.getResultList();
+            if (result.isEmpty()) {
+                System.out.println("No rental matches the query.");
+            }
+            else{
+                for (Rental rental: result) {
+                    System.out.println("Rental Id is: " + rental.getRentalId());
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void queryByFilmCategory(){
+        Session session = null;
+        try{
+            session = sessionFactory.openSession();
+            StringBuilder hql = new StringBuilder("WHERE 1 = 1");
+            System.out.println("Enter a film category: ");
+            String filmCategory = scanner.nextLine();
+            //Category category = new Category(filmCategory);
+            Map<String, Object> results = new HashMap<>();
+            hql.append("AND name = :category");
+            results.put("category", filmCategory);
+            Query query = session.createQuery(hql.toString(), Category.class);
+            for(Map.Entry<String,Object> entry: results.entrySet()){
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+            List<Category> found = query.getResultList();
+            if (found.isEmpty()){
+                System.out.println("No films found with that category");
+            }
+            else{
+                for (Category films: found){
+                    List<FilmCategory> result = films.getFilmCategories();
+                    for (FilmCategory filmCategories : result){
+                        System.out.println("Film id is: " + filmCategories.getFilm().getTitle());
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void delete() {
