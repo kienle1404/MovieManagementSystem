@@ -9,4 +9,7 @@ public interface FilmDao {
     public void create();
     public void query();
     public void delete();
+    public void queryByCustomerName();
+    public void queryByRentalDate();
+    public void queryByFilmCategory();
 }
